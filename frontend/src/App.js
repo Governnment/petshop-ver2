@@ -48,6 +48,10 @@ const App = () => {
           />
           <Route
             path='/seller/product/:id/edit'
+            component={ProductEditScreen}
+          />
+          <Route
+            path='/seller/product/:id/change'
             component={SellerProductEditScreen}
           />
           <Route path='/profile' component={ProfileScreen} />

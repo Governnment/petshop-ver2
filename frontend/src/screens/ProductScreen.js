@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Card,
+  Button,
+  Form,
+  Carousel,
+} from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -87,12 +96,56 @@ const ProductScreen = ({ history, match }) => {
         <>
           <Row>
             <Col md={6}>
-              <Image
+              <Carousel className='product-page-carousel'>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={product.image}
+                    alt='First slide'
+                  />
+                  <Carousel.Caption>
+                    <h3>First slide label</h3>
+                    <p>
+                      Nulla vitae elit libero, a pharetra augue mollis interdum.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={product.image}
+                    alt='Second slide'
+                  />
+
+                  <Carousel.Caption>
+                    <h3>Second slide label</h3>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={product.image}
+                    alt='Third slide'
+                  />
+
+                  <Carousel.Caption>
+                    <h3>Third slide label</h3>
+                    <p>
+                      Praesent commodo cursus magna, vel scelerisque nisl
+                      consectetur.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+              </Carousel>
+              {/* <Image
                 src={product.image}
                 alt={product.name}
                 fluid
                 className='rounded-product-img'
-              />
+              /> */}
             </Col>
             <Col md={3}>
               <ListGroup variant='flush' className='product-details'>
@@ -207,14 +260,14 @@ const ProductScreen = ({ history, match }) => {
           </Row>
           <Row className='product-screen-review '>
             <Col md={6}>
-              <h2 className='p-3'>Отзывы о продавце {product.userLogin}</h2>
+              {/*<h2 className='p-3'>Отзывы о продавце {product.userLogin}</h2>
               {product.userReviews.length === 0 && (
                 <>
                   <img className='w-100' src={noCommentsImg} alt='review' />
                   <Alert>No Reviews</Alert>
                 </>
               )}
-              <ListGroup variant='flush' className='list-group-item-dark'>
+               <ListGroup variant='flush' className='list-group-item-dark'>
                 {product.userReviews.map((review) => (
                   <ListGroup.Item
                     key={review._id}
@@ -274,7 +327,7 @@ const ProductScreen = ({ history, match }) => {
                     </Alert>
                   )}
                 </ListGroup.Item>
-              </ListGroup>
+              </ListGroup>*/}
             </Col>
           </Row>
         </>

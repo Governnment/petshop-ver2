@@ -32,6 +32,10 @@ const productSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    type: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -40,11 +44,11 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    gender: {
+    parentImage: {
       type: String,
       required: true,
     },
-    category: {
+    gender: {
       type: String,
       required: true,
     },
@@ -68,11 +72,6 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    countInStock: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
     userRating: {
       type: Number,
       required: false,
@@ -83,6 +82,45 @@ const productSchema = mongoose.Schema(
       type: Number,
       required: false,
       default: 3,
+    },
+    breedCode: {
+      type: String,
+      required: true,
+    },
+    colorCode: {
+      type: String,
+      required: true,
+    },
+    isPet: {
+      type: Boolean,
+      required: false,
+    },
+    breedingPrice: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    defects: {
+      type: String,
+      required: true,
+    },
+    weight: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    birthdate: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    vaccination: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
     },
   },
   {

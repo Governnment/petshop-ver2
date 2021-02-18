@@ -6,19 +6,28 @@ import { useDispatch, useSelector } from 'react-redux'
 import Alert from '../components/Alert'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
-import { listProductDetails, updateProduct } from '../actions/productActions'
+import { listProductDetails, SellerUpdateProduct } from '../actions/productActions'
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstans'
 
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
 
+  const [type, setType] = useState('')
   const [name, setName] = useState('')
-  const [price, setPrice] = useState(0)
   const [image, setImage] = useState('')
-  const [brand, setBrand] = useState('')
-  const [category, setCategory] = useState('')
-  const [countInStock, setCountInStock] = useState(0)
+  const [parentImage, setParentImage] = useState('')
+  const [price, setPrice] = useState(0)
+  const [gender, setGender] = useState('')
   const [description, setDescription] = useState('')
+  const [breedCode, setBreedCode] = useState('')
+  const [colorCode, setColorCode] = useState('')
+  const [isPet, setIsPet] = useState(false)
+  const [breedingPrice, setBreedingPrice] = useState(0)
+  const [defects, setDefects] = useState('')
+  const [weight, setWeight] = useState(0)
+  const [birthdate, setBirthdate] = useState(0)
+  const [vaccination, setVaccination] = useState('')
+  const [city, setCity] = useState('')
   const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
@@ -41,13 +50,22 @@ const ProductEditScreen = ({ match, history }) => {
       if (!product.name || product._id !== productId) {
         dispatch(listProductDetails(productId))
       } else {
+        setType(product.type)
         setName(product.name)
-        setPrice(product.price)
         setImage(product.image)
-        setBrand(product.brand)
-        setCategory(product.category)
-        setCountInStock(product.countInStock)
+        setParentImage(product.parentImage)
+        setPrice(product.price)
+        setGender(product.gender)
         setDescription(product.description)
+        setBreedCode(product.breedCode)
+        setColorCode(product.colorCode)
+        setIsPet(product.isPet)
+        setBreedingPrice(product.breedingPrice)
+        setDefects(product.defects)
+        setWeight(product.weight)
+        setBirthdate(product.birthdate)
+        setVaccination(product.vaccination)
+        setCity(product.city)
       }
     }
   }, [dispatch, history, productId, product, successUpdate])
@@ -78,15 +96,28 @@ const ProductEditScreen = ({ match, history }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(
-      updateProduct({
+      SellerUpdateProduct({
         _id: productId,
         name,
         price,
         image,
-        brand,
-        category,
         description,
-        countInStock,
+        type,
+        name,
+        image,
+        parentImage,
+        price,
+        gender,
+        description,
+        breedCode,
+        colorCode,
+        isPet,
+        breedingPrice,
+        defects,
+        weight,
+        birthdate,
+        vaccination,
+        city,
       })
     )
   }
@@ -107,30 +138,50 @@ const ProductEditScreen = ({ match, history }) => {
         ) : (
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Кличка</Form.Label>
               <Form.Control
                 type='name'
-                placeholder='Enter name'
+                placeholder='Укажите кличку'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group controlId='type'>
+              <Form.Label>Вид животного</Form.Label>
+              <Form.Control
+                type='type'
+                placeholder='Укажите вид животного'
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
             <Form.Group controlId='price'>
-              <Form.Label>Price</Form.Label>
+              <Form.Label>Цена</Form.Label>
               <Form.Control
                 type='number'
-                placeholder='Enter price'
+                placeholder='Укажите цену'
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='image'>
-              <Form.Label>Image</Form.Label>
+            <Form.Group controlId='gender'>
+              <Form.Label>Пол</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter image url'
+                placeholder='Укажите пол'
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='image'>
+              <Form.Label>Фото питомца</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Введите ссылку на фото'
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
@@ -143,48 +194,128 @@ const ProductEditScreen = ({ match, history }) => {
               {uploading && <Loader />}
             </Form.Group>
 
-            <Form.Group controlId='brand'>
-              <Form.Label>Brand</Form.Label>
+            <Form.Group controlId='parentImage'>
+              <Form.Label>Фото родителей</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter brand'
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
+                placeholder='Введите ссылку на фото'
+                value={parentImage}
+                onChange={(e) => setParentImage(e.target.value)}
               ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='countInStock'>
-              <Form.Label>Count In Stock</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter Count In Stock'
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='category'>
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter category'
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
+              <Form.File
+                id='image-file'
+                label='Choose File'
+                custom
+                onChange={uploadFileHandler}
+              ></Form.File>
+              {uploading && <Loader />}
             </Form.Group>
 
             <Form.Group controlId='description'>
-              <Form.Label>Description</Form.Label>
+              <Form.Label>Описание</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter description'
+                placeholder='Введите описание'
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group controlId='breedCode'>
+              <Form.Label>Код породы</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Укажите код породы'
+                value={breedCode}
+                onChange={(e) => setBreedCode(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='colorCode'>
+              <Form.Label>Код окраса</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Укажите код окраса'
+                value={colorCode}
+                onChange={(e) => setColorCode(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='isPet'>
+              <Form.Label>Это питомец или в разведение?</Form.Label>
+              <Form.Check
+                type='checkbox'
+                label='В разведение'
+                checked={isPet}
+                onChange={(e) => setIsPet(e.target.checked, !isPet)}
+                checked={isPet}
+              ></Form.Check>
+            </Form.Group>
+
+            {isPet ? (
+              <Form.Group controlId='breedingPrice'>
+                <Form.Label>Цена в разведение</Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Укажите цена в разведение'
+                  value={breedingPrice}
+                  onChange={(e) => setBreedingPrice(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+            ) : null}
+
+            <Form.Group controlId='defects'>
+              <Form.Label>Дефекты</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Есть ли какие-то дефекты у питомца?'
+                value={defects}
+                onChange={(e) => setDefects(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='weight'>
+              <Form.Label>Вес</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Укажите вес'
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='birthdate'>
+              <Form.Label>Дата рождения</Form.Label>
+              <Form.Control
+                type='number'
+                placeholder='Укажите дату рождения'
+                value={birthdate}
+                onChange={(e) => setBirthdate(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='vaccination'>
+              <Form.Label>Есть ли прививки, если есть укажите даты</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Укажите даты прививки'
+                value={vaccination}
+                onChange={(e) => setVaccination(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='city'>
+              <Form.Label>Укажите город, в котором продате питомца</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Укажите даты прививки'
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
             <Button type='submit' variant='primary'>
-              Update
+              Добавить
             </Button>
           </Form>
         )}
