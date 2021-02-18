@@ -35,6 +35,20 @@ const Header = () => {
                   <i className='fas fa-shopping-cart'></i>Cart
                 </Nav.Link>
               </LinkContainer> */}
+              <LinkContainer to='/about-us'>
+                <Nav.Link>О нас</Nav.Link>
+              </LinkContainer>
+              <NavDropdown title='Условия'>
+                <LinkContainer to='/seller-info'>
+                  <NavDropdown.Item>Для продавца</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to='/buyer-info'>
+                  <NavDropdown.Item>Для покупателя</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to='/delivery-info'>
+                  <NavDropdown.Item>Доставка и Оплата</NavDropdown.Item>
+                </LinkContainer>
+              </NavDropdown>
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id='username'>
                   <LinkContainer to='/profile'>

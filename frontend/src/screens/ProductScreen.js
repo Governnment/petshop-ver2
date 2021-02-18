@@ -51,7 +51,7 @@ const ProductScreen = ({ history, match }) => {
 
   useEffect(() => {
     if (successSellerReview) {
-      alert('Review Submitted!')
+      //alert('Review Submitted!')
       setRating(0)
       setComment('')
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
@@ -147,21 +147,15 @@ const ProductScreen = ({ history, match }) => {
                 className='rounded-product-img'
               /> */}
             </Col>
-            <Col md={3}>
+            <Col md={4}>
               <ListGroup variant='flush' className='product-details'>
                 <ListGroup.Item className='list-group-item-dark m-1'>
                   <h2>{product.name}</h2>
                 </ListGroup.Item>
-                {/* <ListGroup.Item className='list-group-item-dark m-1'>
+                <ListGroup.Item className='list-group-item-dark m-1'>
                   <Rating
                     value={product.rating}
                     text={`${product.numReviews} рейтинг продавца`}
-                  />
-                </ListGroup.Item> */}
-                <ListGroup.Item className='list-group-item-dark m-1'>
-                  <Rating
-                    value={product.userRating}
-                    text={`${product.userRating} ${product.userLogin}`}
                   />
                 </ListGroup.Item>
                 <ListGroup.Item className='list-group-item-dark m-1 product-details-price'>
@@ -172,6 +166,32 @@ const ProductScreen = ({ history, match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
                   Гендер: {product.gender}
+                </ListGroup.Item>
+                <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                  Дата рождения: {product.birthdate}
+                </ListGroup.Item>
+
+                {product.isPet ? (
+                  <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                    Питомец
+                  </ListGroup.Item>
+                ) : (
+                  <>
+                    <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                      Для разведения
+                    </ListGroup.Item>
+                    <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                      Цена для разведения: {product.breedingPrice}$
+                    </ListGroup.Item>
+                  </>
+                )}
+                <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                  Дата публикации:{' '}
+                  {product.createdAt && product.createdAt.substring(0, 10)}
+                </ListGroup.Item>
+                <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                  Дата последнего обновления: <br />{' '}
+                  {product.updatedAt && product.updatedAt.substring(0, 10)}
                 </ListGroup.Item>
               </ListGroup>
             </Col>
@@ -260,14 +280,14 @@ const ProductScreen = ({ history, match }) => {
           </Row>
           <Row className='product-screen-review '>
             <Col md={6}>
-              {/*<h2 className='p-3'>Отзывы о продавце {product.userLogin}</h2>
+              <h2 className='p-3'>Отзывы о продавце {product.userLogin}</h2>
               {product.userReviews.length === 0 && (
                 <>
                   <img className='w-100' src={noCommentsImg} alt='review' />
                   <Alert>No Reviews</Alert>
                 </>
               )}
-               <ListGroup variant='flush' className='list-group-item-dark'>
+              <ListGroup variant='flush' className='list-group-item-dark'>
                 {product.userReviews.map((review) => (
                   <ListGroup.Item
                     key={review._id}
@@ -327,7 +347,7 @@ const ProductScreen = ({ history, match }) => {
                     </Alert>
                   )}
                 </ListGroup.Item>
-              </ListGroup>*/}
+              </ListGroup>
             </Col>
           </Row>
         </>
