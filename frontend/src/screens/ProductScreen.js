@@ -42,7 +42,7 @@ const ProductScreen = ({ history, match }) => {
 
   useEffect(() => {
     if (successSellerReview) {
-      alert('Review Submitted!')
+      // alert('Review Submitted!')
       setRating(0)
       setComment('')
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
@@ -108,7 +108,7 @@ const ProductScreen = ({ history, match }) => {
                 <ListGroup.Item className='list-group-item-dark m-1'>
                   <Rating
                     value={product.userRating}
-                    text={`${product.userRating} ${product.userLogin}`}
+                    text={`${product.userReviews.length} отзывов`}
                   />
                 </ListGroup.Item>
                 <ListGroup.Item className='list-group-item-dark m-1 product-details-price'>

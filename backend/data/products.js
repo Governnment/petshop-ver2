@@ -8,8 +8,8 @@ const products = [
     category: 'Cat',
     price: 89.99,
     countInStock: 10,
-    rating: 4.5,
-    numReviews: 12,
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: 'Rafti',
@@ -19,8 +19,8 @@ const products = [
     category: 'Cat',
     price: 599.99,
     countInStock: 7,
-    rating: 4.0,
-    numReviews: 8,
+    rating: 0,
+    numReviews: 0,
   },
   {
     name: 'Moonzy',
@@ -30,8 +30,8 @@ const products = [
     category: 'Cat',
     price: 929.99,
     countInStock: 5,
-    rating: 3,
-    numReviews: 12,
+    rating: 0,
+    numReviews: 0,
   },
 ]
 

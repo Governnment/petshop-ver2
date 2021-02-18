@@ -24,6 +24,7 @@ import {
   SELLER_PRODUCT_CREATE_REQUEST,
   SELLER_PRODUCT_CREATE_SUCCESS,
   SELLER_PRODUCT_CREATE_FAIL,
+  CREATE_SELLER_REVIEW_SUCCESS,
 } from '../constants/productConstans'
 
 export const listProducts = (keyword = '', pageNumber = '') => async (
@@ -331,7 +332,7 @@ export const createSellerReview = (userId, review) => async (
 
     await axios.post(`/api/users/${userId}/sellerReview`, review, config)
 
-    dispatch({ type: SELLER_PRODUCT_CREATE_SUCCESS })
+    dispatch({ type: CREATE_SELLER_REVIEW_SUCCESS })
   } catch (error) {
     dispatch({
       type: SELLER_PRODUCT_CREATE_FAIL,

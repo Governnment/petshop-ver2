@@ -117,9 +117,9 @@ const createProductSeller = asyncHandler(async (req, res) => {
     user: req.user._id,
     userId: req.user._id,
     userLogin: req.user.login,
-    userRating: req.user.rating,
-    userReviews: req.user.reviews,
-    userNumReviews: req.user.numReviews,
+    userRating: 0,
+    userReviews: [],
+    userNumReviews: 0,
     image: '/images/sample.jpg',
     gender: 'Sample gender',
     category: 'Sample category',
@@ -211,7 +211,7 @@ const createProductReview = asyncHandler(async (req, res) => {
 
   if (product) {
     const alreadyReviewed = product.reviews.find(
-      (r) => r.user.toString() === req.user._id.toString()
+      (r) => r.product.toString() === req.params.id.toString()
     )
 
     if (alreadyReviewed) {
@@ -224,6 +224,7 @@ const createProductReview = asyncHandler(async (req, res) => {
       rating: Number(rating),
       comment,
       user: req.user._id,
+      product: req.params.id,
     }
 
     product.reviews.push(review)
