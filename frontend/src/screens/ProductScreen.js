@@ -10,7 +10,7 @@ import Alert from '../components/Alert'
 import {
   listProductDetails,
   deleteProduct,
-  createProductReview,
+  createSellerReview,
 } from '../actions/productActions'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstans'
 import noCommentsImg from '../Images/illustrations/clip-no-messages.png'
@@ -25,20 +25,23 @@ const ProductScreen = ({ history, match }) => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const userDetails = useSelector((state) => state.userDetails)
+  const { user } = userDetails
+
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
 
   const productDelete = useSelector((state) => state.productDelete)
   const { success: successDelete } = productDelete
 
-  const productReviewCreate = useSelector((state) => state.productReviewCreate)
+  const sellerReviewCreate = useSelector((state) => state.sellerReviewCreate)
   const {
-    error: errorProductReview,
-    success: successProductReview,
-  } = productReviewCreate
+    error: errorSellerReview,
+    success: successSellerReview,
+  } = sellerReviewCreate
 
   useEffect(() => {
-    if (successProductReview) {
+    if (successSellerReview) {
       alert('Review Submitted!')
       setRating(0)
       setComment('')
@@ -50,7 +53,7 @@ const ProductScreen = ({ history, match }) => {
     if (successDelete) {
       history.push('/')
     }
-  }, [dispatch, history, match, successDelete, successProductReview])
+  }, [dispatch, history, match, successDelete, successSellerReview])
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
@@ -65,7 +68,7 @@ const ProductScreen = ({ history, match }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(
-      createProductReview(match.params.id, {
+      createSellerReview(match.params.id, {
         rating,
         comment,
       })
@@ -96,10 +99,16 @@ const ProductScreen = ({ history, match }) => {
                 <ListGroup.Item className='list-group-item-dark m-1'>
                   <h2>{product.name}</h2>
                 </ListGroup.Item>
-                <ListGroup.Item className='list-group-item-dark m-1'>
+                {/* <ListGroup.Item className='list-group-item-dark m-1'>
                   <Rating
                     value={product.rating}
                     text={`${product.numReviews} рейтинг продавца`}
+                  />
+                </ListGroup.Item> */}
+                <ListGroup.Item className='list-group-item-dark m-1'>
+                  <Rating
+                    value={product.userRating}
+                    text={`${product.userRating} ${product.userLogin}`}
                   />
                 </ListGroup.Item>
                 <ListGroup.Item className='list-group-item-dark m-1 product-details-price'>
@@ -196,17 +205,17 @@ const ProductScreen = ({ history, match }) => {
               )}
             </Col>
           </Row>
-          {/* <Row className='product-screen-review '>
+          <Row className='product-screen-review '>
             <Col md={6}>
-              <h2>J</h2>
-              {product.reviews.length === 0 && (
+              <h2 className='p-3'>Отзывы о продавце {product.userLogin}</h2>
+              {product.userReviews.length === 0 && (
                 <>
                   <img className='w-100' src={noCommentsImg} alt='review' />
                   <Alert>No Reviews</Alert>
                 </>
               )}
               <ListGroup variant='flush' className='list-group-item-dark'>
-                {product.reviews.map((review) => (
+                {product.userReviews.map((review) => (
                   <ListGroup.Item
                     key={review._id}
                     className='list-group-item-dark'
@@ -221,8 +230,8 @@ const ProductScreen = ({ history, match }) => {
                 ))}
                 <ListGroup.Item className='list-group-item-dark'>
                   <h2>Write a Review</h2>
-                  {errorProductReview && (
-                    <Alert variant='danger'>{errorProductReview}</Alert>
+                  {errorSellerReview && (
+                    <Alert variant='danger'>{errorSellerReview}</Alert>
                   )}
                   {userInfo ? (
                     <Form onSubmit={submitHandler}>
@@ -268,7 +277,6 @@ const ProductScreen = ({ history, match }) => {
               </ListGroup>
             </Col>
           </Row>
-         */}
         </>
       )}
     </>

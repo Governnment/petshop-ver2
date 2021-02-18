@@ -25,8 +25,12 @@ const productSchema = mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: 'User',
+    },
+    userLogin: {
+      type: String,
+      required: false,
     },
     name: {
       type: String,
@@ -48,17 +52,17 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    reviews: [reviewSchema],
-    rating: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    numReviews: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
+    // reviews: [reviewSchema],
+    // rating: {
+    //   type: Number,
+    //   required: true,
+    //   default: 0,
+    // },
+    // numReviews: {
+    //   type: Number,
+    //   required: true,
+    //   default: 0,
+    // },
     price: {
       type: Number,
       required: true,
@@ -68,6 +72,17 @@ const productSchema = mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
+    },
+    userRating: {
+      type: Number,
+      required: false,
+      default: 5,
+    },
+    userReviews: [reviewSchema],
+    userNumReviews: {
+      type: Number,
+      required: false,
+      default: 3,
     },
   },
   {

@@ -1,75 +1,75 @@
-import React, { useEffect, useState } from "react";
-import { LinkContainer } from "react-router-bootstrap";
-import { Table, Button, Row, Col } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import Alert from "../components/Alert";
-import Loader from "../components/Loader";
-import Paginate from "../components/Paginate";
-import axios from "axios";
+import React, { useEffect, useState } from 'react'
+import { LinkContainer } from 'react-router-bootstrap'
+import { Table, Button, Row, Col } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import Alert from '../components/Alert'
+import Loader from '../components/Loader'
+import Paginate from '../components/Paginate'
+import axios from 'axios'
 import {
   listProducts,
   SellerDeleteProduct,
   createProduct,
-} from "../actions/productActions";
-import { PRODUCT_CREATE_RESET } from "../constants/productConstans";
+  sellerCreateProduct,
+} from '../actions/productActions'
+import { PRODUCT_CREATE_RESET } from '../constants/productConstans'
 
 const SellerScreen = ({ history, match }) => {
-  const pageNumber = match.params.pageNumber || 1;
+  const pageNumber = match.params.pageNumber || 1
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products, pages, page } = productList;
-  const [sellerProducts, setSellerProducts] = useState([]);
+  const productList = useSelector((state) => state.productList)
+  const { loading, error, products, pages, page } = productList
+  const [sellerProducts, setSellerProducts] = useState([])
 
-  const productDelete = useSelector((state) => state.productDelete);
+  const productDelete = useSelector((state) => state.productDelete)
   const {
     loading: loadingDelete,
     error: errorDelete,
     success: successDelete,
-  } = productDelete;
+  } = productDelete
 
-  const productCreate = useSelector((state) => state.productCreate);
+  const sellerProductCreate = useSelector((state) => state.sellerProductCreate)
   const {
     loading: loadingCreate,
     error: errorCreate,
     success: successCreate,
     product: createdProduct,
-  } = productCreate;
+  } = sellerProductCreate
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET });
+    dispatch({ type: PRODUCT_CREATE_RESET })
 
     if (!userInfo.isSeller) {
-      history.push("/login");
+      history.push('/login')
     }
 
-    const userInfoS = localStorage.getItem("userInfo");
-    const userDataS = JSON.parse(userInfoS);
-    let token;
+    const userInfoS = localStorage.getItem('userInfo')
+    const userDataS = JSON.parse(userInfoS)
+    let token
     if (userDataS !== null) {
-      token = userDataS.token;
+      token = userDataS.token
     }
     axios
       .get(`/api/products/seller/products`, {
         headers: {
-          authorization: "Bearer " + token,
+          authorization: 'Bearer ' + token,
         },
       })
       .then((response) => {
-        console.log("response", response);
-        setSellerProducts(response.data.products);
+        setSellerProducts(response.data.products)
       })
       .catch((error) => {
-        console.log(error);
-      });
+        console.log(error)
+      })
     if (successCreate) {
-      history.push(`/seller/product/${createdProduct._id}/edit`);
+      history.push(`/seller/product/${createdProduct._id}/edit`)
     } else {
-      dispatch(listProducts("", pageNumber));
+      dispatch(listProducts('', pageNumber))
     }
   }, [
     dispatch,
@@ -79,17 +79,17 @@ const SellerScreen = ({ history, match }) => {
     successCreate,
     createdProduct,
     pageNumber,
-  ]);
+  ])
 
   const createProductHandler = () => {
-    dispatch(createProduct());
-  };
+    dispatch(sellerCreateProduct())
+  }
 
   const deleteHandler = (id) => {
-    if (window.confirm("Are you sure?")) {
-      dispatch(SellerDeleteProduct(id));
+    if (window.confirm('Are you sure?')) {
+      dispatch(SellerDeleteProduct(id))
     }
-  };
+  }
 
   return (
     <>
@@ -107,6 +107,7 @@ const SellerScreen = ({ history, match }) => {
       {errorDelete && <Alert variant='danger'>{errorDelete}</Alert>}
       {loadingCreate && <Loader />}
       {errorCreate && <Alert variant='danger'>{errorCreate}</Alert>}
+      {products.length === 0 && <Alert>Your cart is empty</Alert>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -153,7 +154,7 @@ const SellerScreen = ({ history, match }) => {
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default SellerScreen;
+export default SellerScreen

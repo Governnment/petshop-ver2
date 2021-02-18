@@ -30,6 +30,8 @@ const users = [
     description: 'desc43',
     socialMedia1: 'desc43',
     login: 'Seller',
+    rating: 4.5,
+    numReviews: 1,
   },
 ]
 

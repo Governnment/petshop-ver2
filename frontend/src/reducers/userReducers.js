@@ -1,3 +1,4 @@
+import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstans'
 import {
   USER_DELETE_FAIL,
   USER_DELETE_REQUEST,
@@ -28,6 +29,9 @@ import {
   SELLER_REGISTER_REQUEST,
   SELLER_REGISTER_SUCCESS,
   SELLER_REGISTER_FAIL,
+  // CREATE_SELLER_REVIEW_REQUEST,
+  // CREATE_SELLER_REVIEW_SUCCESS,
+  // CREATE_SELLER_REVIEW_FAIL,
 } from '../constants/userConstants'
 
 export const userLoginReducer = (state = {}, action) => {
@@ -149,3 +153,18 @@ export const userUpdateReducer = (state = { user: {} }, action) => {
       return state
   }
 }
+
+// export const sellerReviewCreateReducer = (state = {}, action) => {
+//   switch (action.type) {
+//     case CREATE_SELLER_REVIEW_REQUEST:
+//       return { loading: true }
+//     case CREATE_SELLER_REVIEW_SUCCESS:
+//       return { loading: false, success: true }
+//     case CREATE_SELLER_REVIEW_FAIL:
+//       return { loading: false, error: action.payload }
+//     case PRODUCT_CREATE_REVIEW_RESET:
+//       return {}
+//     default:
+//       return state
+//   }
+// }

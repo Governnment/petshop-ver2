@@ -64,7 +64,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
     },
-    reviews: [reviewSchema],
     description: {
       type: String,
       required: true,
@@ -72,6 +71,17 @@ const userSchema = mongoose.Schema(
     experience: {
       type: Number,
       required: true,
+    },
+    reviews: [reviewSchema],
+    rating: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    numReviews: {
+      type: Number,
+      required: true,
+      default: 0,
     },
   },
   {

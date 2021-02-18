@@ -10,6 +10,8 @@ import {
   deleteUser,
   getUserById,
   updateUser,
+  createSellerReview,
+  getSellerReview,
 } from '../controllers/userController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
@@ -24,6 +26,6 @@ router
   .delete(protect, admin, deleteUser)
   .get(protect, admin, getUserById)
   .put(protect, admin, updateUser)
-// router.route('/:id/verify').post(verifyUser)
+router.route('/:id/sellerReview').post(protect, createSellerReview)
 
 export default router
