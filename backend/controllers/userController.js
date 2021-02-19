@@ -109,6 +109,9 @@ const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
 
   if (user) {
+    const reviews = await Review.find({
+      user: req.user._id
+    })
     res.json({
       _id: user._id,
       name: user.name,
@@ -116,8 +119,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       isSeller: user.isSeller,
       isBuyer: user.isBuyer,
-      rating: user.rating,
-      reviews: user.reviews,
+      reviews,
     })
   } else {
     res.status(404)
