@@ -46,7 +46,9 @@ const getProductById = asyncHandler(async (req, res) => {
 
   if (product) {
     product = JSON.parse(JSON.stringify(product))
-    product.userReviews = await Review.find({ sellerUserId: product.userId })
+    product.userReviews = await Review.find({
+      sellerUserId: product.userId
+    })
     product.userNumReviews = product.userReviews.length
     product.userRating =
       product.userReviews.reduce((acc, item) => item.rating + acc, 0) /
@@ -233,7 +235,6 @@ const SellerUpdateProduct = asyncHandler(async (req, res) => {
 const createProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body
 
-  const user = await User.findById(req.user._id)
   const product = await Product.findById(req.params.id)
 
   if (product) {
@@ -252,7 +253,7 @@ const createProductReview = asyncHandler(async (req, res) => {
       rating: Number(rating),
       comment,
       user: req.user._id,
-      sellerUser: product.userId,
+      sellerUserId: product.userId,
     }
 
     await Review.create(review)
