@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Card,
+  Button,
+  Form,
+  Carousel,
+} from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -42,7 +51,7 @@ const ProductScreen = ({ history, match }) => {
 
   useEffect(() => {
     if (successSellerReview) {
-      // alert('Review Submitted!')
+      //alert('Review Submitted!')
       setRating(0)
       setComment('')
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
@@ -87,28 +96,66 @@ const ProductScreen = ({ history, match }) => {
         <>
           <Row>
             <Col md={6}>
-              <Image
+              <Carousel className='product-page-carousel'>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={product.image}
+                    alt='First slide'
+                  />
+                  <Carousel.Caption>
+                    <h3>First slide label</h3>
+                    <p>
+                      Nulla vitae elit libero, a pharetra augue mollis interdum.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={product.image}
+                    alt='Second slide'
+                  />
+
+                  <Carousel.Caption>
+                    <h3>Second slide label</h3>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className='d-block w-100'
+                    src={product.image}
+                    alt='Third slide'
+                  />
+
+                  <Carousel.Caption>
+                    <h3>Third slide label</h3>
+                    <p>
+                      Praesent commodo cursus magna, vel scelerisque nisl
+                      consectetur.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+              </Carousel>
+              {/* <Image
                 src={product.image}
                 alt={product.name}
                 fluid
                 className='rounded-product-img'
-              />
+              /> */}
             </Col>
-            <Col md={3}>
+            <Col md={4}>
               <ListGroup variant='flush' className='product-details'>
                 <ListGroup.Item className='list-group-item-dark m-1'>
                   <h2>{product.name}</h2>
                 </ListGroup.Item>
-                {/* <ListGroup.Item className='list-group-item-dark m-1'>
+                <ListGroup.Item className='list-group-item-dark m-1'>
                   <Rating
                     value={product.rating}
                     text={`${product.numReviews} рейтинг продавца`}
-                  />
-                </ListGroup.Item> */}
-                <ListGroup.Item className='list-group-item-dark m-1'>
-                  <Rating
-                    value={product.userRating}
-                    text={`${product.userReviews.length} отзывов`}
                   />
                 </ListGroup.Item>
                 <ListGroup.Item className='list-group-item-dark m-1 product-details-price'>
@@ -119,6 +166,32 @@ const ProductScreen = ({ history, match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
                   Гендер: {product.gender}
+                </ListGroup.Item>
+                <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                  Дата рождения: {product.birthdate}
+                </ListGroup.Item>
+
+                {product.isPet ? (
+                  <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                    Питомец
+                  </ListGroup.Item>
+                ) : (
+                  <>
+                    <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                      Для разведения
+                    </ListGroup.Item>
+                    <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                      Цена для разведения: {product.breedingPrice}$
+                    </ListGroup.Item>
+                  </>
+                )}
+                <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                  Дата публикации:{' '}
+                  {product.createdAt && product.createdAt.substring(0, 10)}
+                </ListGroup.Item>
+                <ListGroup.Item className='list-group-item-dark m-1 product-details-description'>
+                  Дата последнего обновления: <br />{' '}
+                  {product.updatedAt && product.updatedAt.substring(0, 10)}
                 </ListGroup.Item>
               </ListGroup>
             </Col>

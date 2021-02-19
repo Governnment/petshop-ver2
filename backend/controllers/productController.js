@@ -91,15 +91,31 @@ const SellerDeleteProduct = asyncHandler(async (req, res) => {
 
 const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
-    name: 'Sample name',
+    type: 'Вид животного',
+    name: 'Кличка',
     price: 0,
     user: req.user._id,
+    userId: req.user._id,
+    userLogin: req.user.login,
+    userRating: 0,
+    userReviews: [],
+    userNumReviews: 0,
     image: '/images/sample.jpg',
-    brand: 'Sample brand',
-    category: 'Sample category',
+    gender: 'Пол',
+    category: 'Категория',
     countInStock: 0,
     numReviews: 0,
-    description: 'Sample descripton',
+    description: 'Описание',
+    breedCode: 'Код породы',
+    colorCode: 'Код окраса',
+    isPet: false,
+    breedingPrice: 0,
+    defects: 'Дефекты',
+    weight: 0,
+    birthdate: 0,
+    vaccination: 'Да/Нет Дата',
+    parentImage: '/images/sample.jpg',
+    favorite: false,
   })
 
   const createProduct = await product.save()
@@ -112,7 +128,8 @@ const createProduct = asyncHandler(async (req, res) => {
 
 const createProductSeller = asyncHandler(async (req, res) => {
   const product = new Product({
-    name: 'Sample name',
+    type: 'Вид животного',
+    name: 'Кличка',
     price: 0,
     user: req.user._id,
     userId: req.user._id,
@@ -121,11 +138,19 @@ const createProductSeller = asyncHandler(async (req, res) => {
     userReviews: [],
     userNumReviews: 0,
     image: '/images/sample.jpg',
-    gender: 'Sample gender',
-    category: 'Sample category',
-    countInStock: 0,
-    numReviews: 0,
-    description: 'Sample descripton',
+    gender: 'Пол',
+    description: 'Описание',
+    breedCode: 'Код породы',
+    colorCode: 'Код окраса',
+    isPet: false,
+    breedingPrice: 0,
+    defects: 'Дефекты',
+    weight: 0,
+    birthdate: 0,
+    vaccination: 'Да/Нет Дата',
+    parentImage: '/images/sample.jpg',
+    city: 'Ваш город',
+    favorite: false,
   })
 
   const createdProduct = await product.save()
@@ -137,26 +162,27 @@ const createProductSeller = asyncHandler(async (req, res) => {
 //? @access   Private/Admin
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const {
-    name,
-    price,
-    description,
-    image,
-    brand,
-    category,
-    countInStock,
-  } = req.body
+  const { name, price, description, image, brand, category } = req.body
 
   const product = await Product.findById(req.params.id)
 
   if (product) {
+    product.type = type
     product.name = name
     product.price = price
+    product.gender = gender
     product.description = description
+    product.breedCode = breedCode
+    product.colorCode = colorCode
+    product.isPet = isPet
+    product.breedingPrice = breedingPrice
+    product.defects = defects
+    product.weight = weight
+    product.birthdate = birthdate
+    product.vaccination = vaccination
+    product.city = city
     product.image = image
-    product.brand = brand
-    product.category = category
-    product.countInStock = countInStock
+    product.parentImage = parentImage
 
     const updatedProduct = await product.save()
     res.json(updatedProduct)

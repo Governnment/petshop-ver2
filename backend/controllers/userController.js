@@ -238,7 +238,10 @@ const createSellerReview = asyncHandler(async (req, res) => {
 
   if (user) {
     const alreadyReviewed = user.reviews.find(
-      (r) => r.user.toString() === req.user._id.toString() && r.product && r.product.toString() === req.params.id.toString()
+      (r) =>
+        r.user.toString() === req.user._id.toString() &&
+        r.product &&
+        r.product.toString() === req.params.id.toString()
     )
 
     if (alreadyReviewed) {
@@ -267,7 +270,7 @@ const createSellerReview = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
 
     if (!product.userReviews) {
-      product.userReviews = [];
+      product.userReviews = []
     }
     product.userReviews.push(review)
     product.userNumReviews = product.userReviews.length
