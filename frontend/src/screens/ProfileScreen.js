@@ -170,7 +170,7 @@ const ProfileScreen = ({ location, history }) => {
       <Col md={9}>
         <h2>Отзывы</h2>
 
-        {product.reviews.map((review) => (
+        {product.userReviews && product.userReviews.map((review) => (
           <ListGroup.Item key={review._id} className='list-group-item-dark'>
             <strong>{review.name}</strong>
             <div className='my-2'>
