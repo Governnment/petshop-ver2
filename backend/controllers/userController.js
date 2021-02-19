@@ -239,7 +239,11 @@ const createSellerReview = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
   if (user) {
-    const alreadyReviewed = await Review.findOne({ user: req.user._id, sellerUserId: product.userId });
+    const alreadyReviewed = await Review.findOne({
+      user: req.user._id,
+      sellerUserId: product.userId,
+    })
+
     if (alreadyReviewed) {
       res.status(400)
       throw new Error('Вы уже оставили отзыв')
@@ -253,7 +257,7 @@ const createSellerReview = asyncHandler(async (req, res) => {
       sellerUserId: product.userId,
     }
 
-    await Review.create(review);
+    await Review.create(review)
 
     res.status(201).json({ message: 'Отзыв добавлен' })
   } else {

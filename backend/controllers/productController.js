@@ -19,27 +19,16 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     : {}
 
-  // let findArgs = {}
-
-  // console.log(req.body.filters)
-
-  // for (let key in req.body.filters) {
-  //   if (req.body.filters[key].length > 0) {
-  //     if (key === 'price') {
-  //     } else {
-  //       findArgs[key] = req.body.filter[key]
-  //     }
-  //   }
-  // }
-
   const count = await Product.countDocuments({ ...keyword })
   let products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
 
-  products = JSON.parse(JSON.stringify(products));
+  products = JSON.parse(JSON.stringify(products))
   for (let i = 0; i < products.length; i++) {
-    products[i].userReviews = await Review.find({ sellerUserId: products[i].userId });
+    products[i].userReviews = await Review.find({
+      sellerUserId: products[i].userId,
+    })
     products[i].userNumReviews = products[i].userReviews.length
     products[i].userRating =
       products[i].userReviews.reduce((acc, item) => item.rating + acc, 0) /
@@ -56,7 +45,7 @@ const getProductById = asyncHandler(async (req, res) => {
   let product = await Product.findById(req.params.id)
 
   if (product) {
-    product = JSON.parse(JSON.stringify(product));
+    product = JSON.parse(JSON.stringify(product))
     product.userReviews = await Review.find({ sellerUserId: product.userId })
     product.userNumReviews = product.userReviews.length
     product.userRating =
@@ -248,7 +237,10 @@ const createProductReview = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    const alreadyReviewed = await Review.findOne({ user: req.user._id, sellerUserId: product.userId });
+    const alreadyReviewed = await Review.findOne({
+      user: req.user._id,
+      sellerUserId: product.userId,
+    })
 
     if (alreadyReviewed) {
       res.status(400)
@@ -263,8 +255,7 @@ const createProductReview = asyncHandler(async (req, res) => {
       sellerUser: product.userId,
     }
 
-    await Review.create(review);
-
+    await Review.create(review)
     res.status(201).json({ message: 'Review added' })
   } else {
     res.status(404)
