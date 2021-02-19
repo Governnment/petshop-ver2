@@ -304,7 +304,7 @@ const ProductScreen = ({ history, match }) => {
                     </ListGroup.Item>
                   ))}
                 <ListGroup.Item className='list-group-item-dark'>
-                  <h2>Write a Review</h2>
+                  <h2>Write a Review </h2>
                   {errorSellerReview && (
                     <Alert variant='danger'>{errorSellerReview}</Alert>
                   )}
