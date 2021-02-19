@@ -154,8 +154,8 @@ const ProductScreen = ({ history, match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item className='list-group-item-dark m-1'>
                   <Rating
-                    value={product.rating}
-                    text={`${product.numReviews} рейтинг продавца`}
+                    value={product.userRating}
+                    text={`${product.userNumReviews} рейтинг продавца`}
                   />
                 </ListGroup.Item>
                 <ListGroup.Item className='list-group-item-dark m-1 product-details-price'>
@@ -281,26 +281,28 @@ const ProductScreen = ({ history, match }) => {
           <Row className='product-screen-review '>
             <Col md={6}>
               <h2 className='p-3'>Отзывы о продавце {product.userLogin}</h2>
-              {product.userReviews.length === 0 && (
-                <>
-                  <img className='w-100' src={noCommentsImg} alt='review' />
-                  <Alert>No Reviews</Alert>
-                </>
-              )}
-              <ListGroup variant='flush' className='list-group-item-dark'>
-                {product.userReviews.map((review) => (
-                  <ListGroup.Item
-                    key={review._id}
-                    className='list-group-item-dark'
-                  >
-                    <strong>{review.name}</strong>
-                    <div className='my-2'>
-                      <Rating value={review.rating} />
-                    </div>
-                    <p>{review.createdAt.substring(0, 10)}</p>
-                    <p>{review.comment}</p>
-                  </ListGroup.Item>
+              {!product.userReviews ||
+                (product.userReviews.length === 0 && (
+                  <>
+                    <img className='w-100' src={noCommentsImg} alt='review' />
+                    <Alert>No Reviews</Alert>
+                  </>
                 ))}
+              <ListGroup variant='flush' className='list-group-item-dark'>
+                {product.userReviews &&
+                  product.userReviews.map((review) => (
+                    <ListGroup.Item
+                      key={review._id}
+                      className='list-group-item-dark'
+                    >
+                      <strong>{review.name}</strong>
+                      <div className='my-2'>
+                        <Rating value={review.rating} />
+                      </div>
+                      <p>{review.createdAt.substring(0, 10)}</p>
+                      <p>{review.comment}</p>
+                    </ListGroup.Item>
+                  ))}
                 <ListGroup.Item className='list-group-item-dark'>
                   <h2>Write a Review</h2>
                   {errorSellerReview && (

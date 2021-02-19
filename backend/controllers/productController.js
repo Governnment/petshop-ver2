@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
+import Review from '../models/reviewModel.js'
 
 //? @desk     Fetch all producs
 //? @rout     GET /api/products
@@ -18,23 +19,21 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     : {}
 
-  // let findArgs = {}
-
-  // console.log(req.body.filters)
-
-  // for (let key in req.body.filters) {
-  //   if (req.body.filters[key].length > 0) {
-  //     if (key === 'price') {
-  //     } else {
-  //       findArgs[key] = req.body.filter[key]
-  //     }
-  //   }
-  // }
-
   const count = await Product.countDocuments({ ...keyword })
   const products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
+
+  products = JSON.parse(JSON.stringify(products))
+  for (let i = 0; i < products.length; i++) {
+    products[i].userReviews = await Review.find({
+      sellerUserId: products[i].userId,
+    })
+    products[i].userNumReviews = products[i].userReviews.length
+    products[i].userRating =
+      products[i].userReviews.reduce((acc, item) => item.rating + acc, 0) /
+      products[i].userReviews.length
+  }
 
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
@@ -43,9 +42,16 @@ const getProducts = asyncHandler(async (req, res) => {
 //? @access   Public
 
 const getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id)
+  let product = await Product.findById(req.params.id)
 
   if (product) {
+    product = JSON.parse(JSON.stringify(product))
+    product.userReviews = await Review.find({ sellerUserId: product.userId })
+    product.userNumReviews = product.userReviews.length
+    product.userRating =
+      product.userReviews.reduce((acc, item) => item.rating + acc, 0) /
+      product.userReviews.length
+
     res.json(product)
   } else {
     res.status(404)
@@ -97,9 +103,6 @@ const createProduct = asyncHandler(async (req, res) => {
     user: req.user._id,
     userId: req.user._id,
     userLogin: req.user.login,
-    userRating: 0,
-    userReviews: [],
-    userNumReviews: 0,
     image: '/images/sample.jpg',
     gender: 'Пол',
     category: 'Категория',
@@ -134,9 +137,6 @@ const createProductSeller = asyncHandler(async (req, res) => {
     user: req.user._id,
     userId: req.user._id,
     userLogin: req.user.login,
-    userRating: 0,
-    userReviews: [],
-    userNumReviews: 0,
     image: '/images/sample.jpg',
     gender: 'Пол',
     description: 'Описание',
@@ -233,12 +233,14 @@ const SellerUpdateProduct = asyncHandler(async (req, res) => {
 const createProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body
 
+  const user = await User.findById(req.user._id)
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    const alreadyReviewed = product.reviews.find(
-      (r) => r.product.toString() === req.params.id.toString()
-    )
+    const alreadyReviewed = await Review.findOne({
+      user: req.user._id,
+      sellerUserId: product.userId,
+    })
 
     if (alreadyReviewed) {
       res.status(400)
@@ -250,18 +252,10 @@ const createProductReview = asyncHandler(async (req, res) => {
       rating: Number(rating),
       comment,
       user: req.user._id,
-      product: req.params.id,
+      sellerUser: product.userId,
     }
 
-    product.reviews.push(review)
-
-    product.numReviews = product.reviews.length
-
-    product.rating =
-      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-      product.reviews.length
-
-    await product.save()
+    await Review.create(review)
     res.status(201).json({ message: 'Review added' })
   } else {
     res.status(404)

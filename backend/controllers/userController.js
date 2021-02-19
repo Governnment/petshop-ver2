@@ -3,6 +3,7 @@ import generateToken from '../utils/generateToken.js'
 import speakeasy from 'speakeasy'
 import User from '../models/userModel.js'
 import Product from '../models/productModel.js'
+import Review from '../models/reviewModel.js'
 
 //? @desk     Auth user & get token
 //? @rout     Post /api/users/login
@@ -235,14 +236,13 @@ const createSellerReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body
 
   const user = await User.findById(req.user._id)
+  const product = await Product.findById(req.params.id)
 
   if (user) {
-    const alreadyReviewed = user.reviews.find(
-      (r) =>
-        r.user.toString() === req.user._id.toString() &&
-        r.product &&
-        r.product.toString() === req.params.id.toString()
-    )
+    const alreadyReviewed = await Review.findOne({
+      user: req.user._id,
+      sellerUserId: product.userId,
+    })
 
     if (alreadyReviewed) {
       res.status(400)
@@ -254,30 +254,10 @@ const createSellerReview = asyncHandler(async (req, res) => {
       rating: Number(rating),
       comment,
       user: req.user._id,
-      product: req.params.id,
+      sellerUserId: product.userId,
     }
 
-    user.reviews.push(review)
-
-    user.numReviews = user.reviews.length
-
-    user.rating =
-      user.reviews.reduce((acc, item) => item.rating + acc, 0) /
-      user.reviews.length
-
-    await user.save()
-
-    const product = await Product.findById(req.params.id)
-
-    if (!product.userReviews) {
-      product.userReviews = []
-    }
-    product.userReviews.push(review)
-    product.userNumReviews = product.userReviews.length
-    product.userRating =
-      product.userReviews.reduce((acc, item) => item.rating + acc, 0) /
-      product.userReviews.length
-    await product.save()
+    await Review.create(review)
 
     res.status(201).json({ message: 'Отзыв добавлен' })
   } else {
