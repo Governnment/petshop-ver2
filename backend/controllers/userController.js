@@ -110,7 +110,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     const reviews = await Review.find({
-      user: req.user._id
+      sellerUserId: req.user._id
     })
     res.json({
       _id: user._id,
