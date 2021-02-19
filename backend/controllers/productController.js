@@ -37,33 +37,33 @@ const getProducts = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .skip(pageSize * (page - 1))
 
-  var productsWithReview = JSON.parse(JSON.stringify(products));
-  for (let i = 0; i < productsWithReview.length; i++) {
-    productsWithReview[i].userReviews = await Review.find({ sellerUserId: productsWithReview[i].userId });
-    productsWithReview[i].userNumReviews = productsWithReview[i].userReviews.length
-    productsWithReview[i].userRating =
-      productsWithReview[i].userReviews.reduce((acc, item) => item.rating + acc, 0) /
-      productsWithReview[i].userReviews.length
+  products = JSON.parse(JSON.stringify(products));
+  for (let i = 0; i < products.length; i++) {
+    products[i].userReviews = await Review.find({ sellerUserId: products[i].userId });
+    products[i].userNumReviews = products[i].userReviews.length
+    products[i].userRating =
+      products[i].userReviews.reduce((acc, item) => item.rating + acc, 0) /
+      products[i].userReviews.length
   }
 
-  res.json({ products: productsWithReview, page, pages: Math.ceil(count / pageSize) })
+  res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 //? @desk     Fetch a product by ID
 //? @rout     GET /api/products>:id
 //? @access   Public
 
 const getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id)
+  let product = await Product.findById(req.params.id)
 
   if (product) {
-    var productWithReview = JSON.parse(JSON.stringify(product));
-    productWithReview.userReviews = await Review.find({ sellerUserId: product.userId })
-    productWithReview.userNumReviews = productWithReview.userReviews.length
-    productWithReview.userRating =
-      productWithReview.userReviews.reduce((acc, item) => item.rating + acc, 0) /
-      productWithReview.userReviews.length
+    product = JSON.parse(JSON.stringify(product));
+    product.userReviews = await Review.find({ sellerUserId: product.userId })
+    product.userNumReviews = product.userReviews.length
+    product.userRating =
+      product.userReviews.reduce((acc, item) => item.rating + acc, 0) /
+      product.userReviews.length
 
-    res.json(productWithReview)
+    res.json(product)
   } else {
     res.status(404)
     throw new Error('Product not found')
